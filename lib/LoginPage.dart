@@ -29,6 +29,7 @@ class LoginPage extends StatelessWidget {
                       border: Border(bottom: BorderSide(color: Colors.grey))
                     ),
                     child: TextField(
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintStyle: TextStyle(color: Colors.grey.withOpacity(.8)),
@@ -40,11 +41,13 @@ class LoginPage extends StatelessWidget {
                     decoration: BoxDecoration(
                     ),
                     child: TextField(
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintStyle: TextStyle(color: Colors.grey.withOpacity(.8)),
                         hintText: "Password"
                       ),
+                      obscureText: true,
                     ),
                   ),
                 ],
@@ -59,7 +62,7 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                   color: Colors.blue[800]
                 ),
-                child: Center(child: Text("Login", style: TextStyle(color: Colors.white.withOpacity(.7)),)),
+                child: Center(child: Text("Login", style: TextStyle(color: Colors.white.withOpacity(.7),fontWeight: FontWeight.bold),)),
               ),
             )),
           ],
