@@ -32,6 +32,8 @@ dependencies:
   flutter:
     sdk: flutter
   simple_animations: ^1.1.3
+  page_transition: ^1.1.4
+  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -41,6 +43,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.10.0"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/you.jpg"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

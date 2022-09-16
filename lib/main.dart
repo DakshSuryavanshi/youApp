@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:you/Animations/FadeAnimation.dart';
+import 'package:you/LoginPage.dart';
+import 'package:page_transition/page_transition.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -22,6 +24,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Animation<double> _widthAnimation;
   late Animation<double> _positionAnimation;
 
+  bool hideIcon = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -29,18 +33,50 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _scaleController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    
-    _scaleAnimation = Tween<double>(
-      begin: 1.0, end: 0.8
-    ).animate(_scaleController)..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _widthController.forward();
-      }
-    });
 
+    _scaleAnimation =
+        Tween<double>(begin: 1.0, end: 0.8).animate(_scaleController)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _widthController.forward();
+            }
+          });
 
+    _widthController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
 
+    _widthAnimation =
+        Tween<double>(begin: 80.0, end: 300.0).animate(_widthController)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _positionController.forward();
+            }
+          });
 
+    _positionController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1000));
+
+    _positionAnimation =
+        Tween<double>(begin: 0.0, end: 215.0).animate(_positionController)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              setState(() {
+                hideIcon = true;
+              });
+              _scale2Controller.forward();
+            }
+          });
+
+    _scale2Controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+
+    _scale2Animation =
+        Tween<double>(begin: 1.0, end: 32.0).animate(_scale2Controller)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: LoginPage()));
+            }
+          });
   }
 
   @override
@@ -119,30 +155,64 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       height: 180,
                     ),
                     FadeAnimation(
-                        1.6,AnimatedBuilder(
+                        1.6,
+                        AnimatedBuilder(
                           animation: _scaleController,
                           builder: (context, child) => Transform.scale(
-                            scale: _scaleAnimation.value,
-                          child: Center(
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(.4),
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                    color: Colors.blue, shape: BoxShape.circle),
-                                child: Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.white,
+                              scale: _scaleAnimation.value,
+                              child: Center(
+                                child: AnimatedBuilder(
+                                  animation: _widthController,
+                                  builder: (context, child) => Container(
+                                    width: _widthAnimation.value,
+                                    height: 80,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue.withOpacity(.4),
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: InkWell(
+                                      onTap: () {
+                                        _scaleController.forward();
+                                      },
+                                      child: Stack(children: <Widget>[
+                                        AnimatedBuilder(
+                                          animation: _positionController,
+                                          builder: (context, child) =>
+                                              Positioned(
+                                            left: _positionAnimation.value,
+                                            child: AnimatedBuilder(
+                                              animation: _scale2Controller,
+                                              builder: (context, child) =>
+                                                  Transform.scale(
+                                                      scale: _scale2Animation
+                                                          .value,
+                                                      child: Container(
+                                                        width: 60,
+                                                        height: 60,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                color:
+                                                                    Colors.blue,
+                                                                shape: BoxShape
+                                                                    .circle),
+                                                        child: hideIcon == false
+                                                            ? Icon(
+                                                                Icons
+                                                                    .arrow_forward,
+                                                                color: Colors
+                                                                    .white,
+                                                              )
+                                                            : Container(),
+                                                      )),
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          )),
+                              )),
                         )),
                     SizedBox(
                       height: 60,
