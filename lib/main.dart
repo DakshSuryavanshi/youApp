@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:you/Animations/FadeAnimation.dart';
 import 'package:you/LoginPage.dart';
 import 'package:page_transition/page_transition.dart';
 
-void main() => runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-    ));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom]);
+
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: HomePage(),
+  ));
+}
 
 class HomePage extends StatefulWidget {
   @override
@@ -43,7 +50,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           });
 
     _widthController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 0));
 
     _widthAnimation =
         Tween<double>(begin: 80.0, end: 300.0).animate(_widthController)
@@ -53,8 +60,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             }
           });
 
-    _positionController = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
+    _positionController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 0));
 
     _positionAnimation =
         Tween<double>(begin: 0.0, end: 215.0).animate(_positionController)
@@ -68,13 +75,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           });
 
     _scale2Controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
 
     _scale2Animation =
         Tween<double>(begin: 1.0, end: 32.0).animate(_scale2Controller)
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
-              Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: LoginPage()));
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade, child: LoginPage()));
             }
           });
   }
@@ -88,6 +98,90 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         width: double.infinity,
         child: Stack(
           children: <Widget>[
+            Positioned(
+              top: -50,
+              left: 0,
+              child: FadeAnimation(
+                  1,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -100,
+              left: 0,
+              child: FadeAnimation(
+                  1.3,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -150,
+              left: 0,
+              child: FadeAnimation(
+                  1.6,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -50,
+              left: 0,
+              child: FadeAnimation(
+                  1,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -100,
+              left: 0,
+              child: FadeAnimation(
+                  1.3,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -150,
+              left: 0,
+              child: FadeAnimation(
+                  1.6,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
             Positioned(
               top: -50,
               left: 0,
@@ -164,7 +258,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 child: AnimatedBuilder(
                                   animation: _widthController,
                                   builder: (context, child) => Container(
-                                    width: _widthAnimation.value,
+                                    width: 80,
                                     height: 80,
                                     padding: EdgeInsets.all(10),
                                     decoration: BoxDecoration(
@@ -177,36 +271,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       },
                                       child: Stack(children: <Widget>[
                                         AnimatedBuilder(
-                                          animation: _positionController,
+                                          animation: _scale2Controller,
                                           builder: (context, child) =>
-                                              Positioned(
-                                            left: _positionAnimation.value,
-                                            child: AnimatedBuilder(
-                                              animation: _scale2Controller,
-                                              builder: (context, child) =>
-                                                  Transform.scale(
-                                                      scale: _scale2Animation
-                                                          .value,
-                                                      child: Container(
-                                                        width: 60,
-                                                        height: 60,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                color:
-                                                                    Colors.blue,
-                                                                shape: BoxShape
-                                                                    .circle),
-                                                        child: hideIcon == false
-                                                            ? Icon(
-                                                                Icons
-                                                                    .arrow_forward,
-                                                                color: Colors
-                                                                    .white,
-                                                              )
-                                                            : Container(),
-                                                      )),
-                                            ),
-                                          ),
+                                              Transform.scale(
+                                                  scale: _scale2Animation.value,
+                                                  child: Container(
+                                                    width: 60,
+                                                    height: 60,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.blue,
+                                                        shape: BoxShape.circle),
+                                                    child: hideIcon == false
+                                                        ? Icon(
+                                                            Icons.touch_app,
+                                                            color: Colors.white,
+                                                          )
+                                                        : Container(),
+                                                  )),
                                         ),
                                       ]),
                                     ),
