@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:you/Animations/FadeAnimation.dart';
+import 'package:you/cardview.dart';
 import 'package:you/web_View.dart';
 
 class LoginPage extends StatelessWidget {
@@ -68,7 +69,7 @@ class LoginPage extends StatelessWidget {
             GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => WebViewApp()));
+                      MaterialPageRoute(builder: (context) => cardview()));
                 },
                 child: FadeAnimation(
                   1.8,
