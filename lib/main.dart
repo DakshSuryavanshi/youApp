@@ -28,8 +28,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   late Animation<double> _scaleAnimation;
   late Animation<double> _scale2Animation;
-  late Animation<double> _widthAnimation;
   late Animation<double> _positionAnimation;
+  late Animation<double> _widthAnimation;
 
   bool hideIcon = false;
 

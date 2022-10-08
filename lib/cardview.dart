@@ -64,13 +64,13 @@ class _cardviewState extends State<cardview> {
               );
             }
             if (index == 1) {
-              //2.item
+              print("excel");
             }
             if (index == 2) {
-              //3.item
+              print("pickle");
             }
             if (index == 3) {
-              //4.item
+              print("others");
             }
           },
           child: Column(
