@@ -1,115 +1,308 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:you/Animations/FadeAnimation.dart';
+import 'package:you/LoginPage.dart';
+import 'package:page_transition/page_transition.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom]);
+
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: HomePage(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
-  // This widget is the root of your application.
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late AnimationController _scale2Controller;
+  late AnimationController _widthController;
+  late AnimationController _positionController;
+  late AnimationController _scaleController;
+
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _scale2Animation;
+  late Animation<double> _positionAnimation;
+  late Animation<double> _widthAnimation;
+
+  bool hideIcon = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _scaleController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+
+    _scaleAnimation =
+        Tween<double>(begin: 1.0, end: 0.8).animate(_scaleController)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _widthController.forward();
+            }
+          });
+
+    _widthController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 0));
+
+    _widthAnimation =
+        Tween<double>(begin: 80.0, end: 300.0).animate(_widthController)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _positionController.forward();
+            }
+          });
+
+    _positionController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 0));
+
+    _positionAnimation =
+        Tween<double>(begin: 0.0, end: 215.0).animate(_positionController)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              setState(() {
+                hideIcon = true;
+              });
+              _scale2Controller.forward();
+            }
+          });
+
+    _scale2Controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+
+    _scale2Animation =
+        Tween<double>(begin: 1.0, end: 32.0).animate(_scale2Controller)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade, child: LoginPage()));
+            }
+          });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: Color.fromRGBO(1, 1, 13, 1),
+      body: Container(
+        width: double.infinity,
+        child: Stack(
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Positioned(
+              top: -50,
+              left: 0,
+              child: FadeAnimation(
+                  1,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Positioned(
+              top: -100,
+              left: 0,
+              child: FadeAnimation(
+                  1.3,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
             ),
+            Positioned(
+              top: -150,
+              left: 0,
+              child: FadeAnimation(
+                  1.6,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -50,
+              left: 0,
+              child: FadeAnimation(
+                  1,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -100,
+              left: 0,
+              child: FadeAnimation(
+                  1.3,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -150,
+              left: 0,
+              child: FadeAnimation(
+                  1.6,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -50,
+              left: 0,
+              child: FadeAnimation(
+                  1,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -100,
+              left: 0,
+              child: FadeAnimation(
+                  1.3,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Positioned(
+              top: -150,
+              left: 0,
+              child: FadeAnimation(
+                  1.6,
+                  Container(
+                    width: width,
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/one.png'),
+                            fit: BoxFit.cover)),
+                  )),
+            ),
+            Container(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    FadeAnimation(
+                        1,
+                        Text(
+                          "Welcome",
+                          style: TextStyle(color: Colors.white, fontSize: 40),
+                        )),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    FadeAnimation(
+                        1.3,
+                        Text(
+                          "Data will talk if you're willing to listen...",
+                          style: TextStyle(color: Colors.white70, height: 1.4),
+                        )),
+                    SizedBox(
+                      height: 180,
+                    ),
+                    FadeAnimation(
+                        1.6,
+                        AnimatedBuilder(
+                          animation: _scaleController,
+                          builder: (context, child) => Transform.scale(
+                              scale: _scaleAnimation.value,
+                              child: Center(
+                                child: AnimatedBuilder(
+                                  animation: _widthController,
+                                  builder: (context, child) => Container(
+                                    width: 80,
+                                    height: 80,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue.withOpacity(.4),
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: InkWell(
+                                      onTap: () {
+                                        _scaleController.forward();
+                                      },
+                                      child: Stack(children: <Widget>[
+                                        AnimatedBuilder(
+                                          animation: _scale2Controller,
+                                          builder: (context, child) =>
+                                              Transform.scale(
+                                                  scale: _scale2Animation.value,
+                                                  child: Container(
+                                                    width: 60,
+                                                    height: 60,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.blue,
+                                                        shape: BoxShape.circle),
+                                                    child: hideIcon == false
+                                                        ? Icon(
+                                                            Icons.touch_app,
+                                                            color: Colors.white,
+                                                          )
+                                                        : Container(),
+                                                  )),
+                                        ),
+                                      ]),
+                                    ),
+                                  ),
+                                ),
+                              )),
+                        )),
+                    SizedBox(
+                      height: 60,
+                    ),
+                  ],
+                ))
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
