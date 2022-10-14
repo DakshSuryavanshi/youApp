@@ -1,7 +1,14 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-// import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_webview_pro/webview_flutter.dart';
+// Delete the package:webview_flutter/webview_flutter.dart import
+import 'src/web_view_stack.dart';  // Add this import
+
+void main() {
+  runApp(
+    const MaterialApp(
+      home: WebViewApp(),
+    ),
+  );
+}
 
 class WebViewApp extends StatefulWidget {
   const WebViewApp({super.key});
@@ -11,22 +18,13 @@ class WebViewApp extends StatefulWidget {
 }
 
 class _WebViewAppState extends State<WebViewApp> {
-  // Add from here ...
-  @override
-  void initState() {
-    if (Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    }
-    super.initState();
-  }
-  // ... to here.
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const WebView(
-        initialUrl: 'https://youai.herokuapp.com/',
+      appBar: AppBar(
+        title: const Text('YOU.ai'),
       ),
+      body: const WebViewStack(),   // Replace the WebView widget with WebViewStack
     );
   }
 }
